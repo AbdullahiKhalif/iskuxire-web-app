@@ -157,11 +157,6 @@ const displayMessage = (type, message) => {
   }
 };
 
-$("#reportTable tbody").on("click", "a.update_info", function () {
-  const id = $(this).attr("update_id"); // Corrected attribute name
-  fetchreportInfo(id);
-});
-
 function loadData() {
   $("#uploadPosts").html("");
   var sendData = {
@@ -181,7 +176,7 @@ function loadData() {
       if (status) {
         response.forEach((item) => {
           html += `
-            <div class="row justify-content-center mb-4">
+            <div class="row justify-content-center mb-4" style="cursor: pointer;">
               <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="card mb-3">
                   <div class="card-body">
@@ -211,19 +206,30 @@ function loadData() {
   });
 }
 
-$("#reportTable tbody").on("click", "a.delete_info", function () {
-  const id = $(this).attr("delete_id"); // Corrected attribute name
-  Swal.fire({
-    title: "Are you sure?",
-    text: "Do you want to delete this report?",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#3085d6",
-    cancelButtonColor: "#d33",
-    confirmButtonText: "Yes, delete it!",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      deletereportInfo(id);
-    }
-  });
+$("#uploadPosts").on("click","a.update_info", function(){
+    var id = $(this).attr("update_id");
+    fetchreportInfo(id);
 });
+
+$("#uploadPosts").on("click","a.delete_info", function() {
+    var id = $(this).attr("delete_id");
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+            deletereportInfo(id);
+          Swal.fire(
+            'Deleted!',
+            'Successfully Deleted ✔😃.',
+            'success'
+          )
+        }
+      })
+})

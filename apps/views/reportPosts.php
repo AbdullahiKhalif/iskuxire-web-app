@@ -17,7 +17,7 @@ include '../layouts/header.php';
     <div class="container-fluid p-0">
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                <div class="card bg-muted">
                     <div class="card-header">
                         <i class="fa fa-users fs-4 text-primary"></i> <span class="card-title fs-4">Report DataTables</span>
                         <h6 class="card-subtitle text-muted">You can add new report, update and delete also. Feel free to use our system 😍.</h6>

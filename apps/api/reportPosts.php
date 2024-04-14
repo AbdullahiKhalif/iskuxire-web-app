@@ -21,11 +21,34 @@ function readAllReports($conn){
     echo json_encode($message);
 }
 
-//read All Users Reports DaWith Join datata
-function readAllUserReport($conn){
+//read All User Reports DaWith Join datata
+function readAllUsersReport($conn){
+    $user_id =$_SESSION['user_id'];
     $query = "SELECT R.report_id, U.username, U.user_id, U.image, R.image, R.description, R.report_date
     FROM Reports AS R
-    JOIN Users AS U ON R.user_id = U.user_id;
+    JOIN Users AS U ON R.user_id = U.user_id ' ORDER BY R.report_date DESC;
+    ";
+    $result = $conn->query($query);
+    $data = array();
+    $message = array();
+
+    if($result) {
+        while($row = $result->fetch_assoc()) {
+            $data [] = $row;
+        }
+        $message = array("status" => true, "data" => $data);
+    }else{
+        $message = array("status" => false, "data" => $conn->error);
+    }
+    echo json_encode($message);
+}
+
+//read All User Reports DaWith Join datata
+function readAllUserReport($conn){
+    $user_id =$_SESSION['user_id'];
+    $query = "SELECT R.report_id, U.username, U.user_id, U.image, R.image, R.description, R.report_date
+    FROM Reports AS R
+    JOIN Users AS U ON R.user_id = U.user_id ORDER BY R.report_date DESC;
     ";
     $result = $conn->query($query);
     $data = array();
