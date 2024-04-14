@@ -27,6 +27,7 @@ include '../layouts/header.php';
 									
 								</div>
 								<div class="card-body">
+									<div class="table-responsive">
 									<table id="userTable" class="table table-striped DataTableResponsive" style="width:100%">
 										<thead class="table">
 											<tr>
@@ -43,6 +44,7 @@ include '../layouts/header.php';
 										</thead>
 										<tbody style="font-size: 12px;"></tbody>
 									</table>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -69,7 +71,8 @@ include '../layouts/header.php';
 															
 															<div class="form-group">
 																<!-- <label for="userid" class="fw-bold text-dark">UserId <span class="text-muted">*</span></label> -->
-																<input type="hidden" name="userId" id="userId" class="form-control">
+																<input type="hidden" name="user_id" id="user_id" class="form-control">
+																
 															</div>
 															<div class="form-group">
 																<label for="userid" class="fw-bold text-dark">Username <span class="text-muted">*</span></label>
@@ -91,9 +94,7 @@ include '../layouts/header.php';
 																<label for="role" class="fw-bold text-dark">Role <span class="text-muted">*</span></label>
 																<select name="role" id="role" class="form-control">
 																	<option value="0">Select Options</option>
-																	<option value="Super Admin">Super Admin</option>
 																	<option value="User">User</option>
-																	<option value="Coach">Coach</option>
 																	<option value="Admin">Admin</option>
 																</select>
 															</div>

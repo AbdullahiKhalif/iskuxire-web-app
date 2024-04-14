@@ -23,6 +23,50 @@ function readAllUsers($conn){
     
 }
 
+// read user information
+function readUserInfo($conn){
+    extract($_POST);
+    $query = "SELECT * FROM users where user_id = '$user_id'";
+    $result = $conn->query($query);
+    $data = array();
+    $message = array();
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $data [] = $row;
+        }
+
+        $message = array("status" => true, "data" => $data);
+    }else{
+        $message = array("status" => false, "data" => $conn->error);
+    }
+
+    echo json_encode($message);
+    
+}
+
+// read users Active members
+function readUserActiveStatus($conn){
+    extract($_POST);
+    $query = "SELECT * FROM users where status = 'Active'";
+    $result = $conn->query($query);
+    $data = array();
+    $message = array();
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $data [] = $row;
+        }
+
+        $message = array("status" => true, "data" => $data);
+    }else{
+        $message = array("status" => false, "data" => $conn->error);
+    }
+
+    echo json_encode($message);
+    
+}
+
 // register user
 function registerUser($conn) {
     extract($_POST);
@@ -66,7 +110,7 @@ function registerUser($conn) {
     else if ($checkResultPhone->num_rows > 0) {
         $data = array("status" => false, "data" => "Phone is already taken");
     } else {
-        $query = "INSERT INTO users (user_id, username, email, password, phone, role, image, status) VALUES ('$newId', '$username', '$email', MD5('$password'), '$phone', '$role', '$savedName', '$status')";
+        $query = "INSERT INTO users (user_id, username, email, password, phone, role, image, status) VALUES ('$newId', '$username', '$email', '$password', '$phone', '$role', '$savedName', '$status')";
 
         $result = $conn->query($query);
 
@@ -130,7 +174,7 @@ function updateUser($conn) {
         else if ($checkResultPhone->num_rows > 0) {
             $data = array("status" => false, "data" => "Phone is already taken");
         } else {
-            $query = "UPDATE users SET username = '$username', email = '$email', password = MD5('$password'), phone = '$phone', role = '$role', image = '$savedName', status = '$status' WHERE user_id = '$user_id'";
+            $query = "UPDATE users SET username = '$username', email = '$email', password = '$password', phone = '$phone', role = '$role', image = '$savedName', status = '$status' WHERE user_id = '$user_id'";
     
             $result = $conn->query($query);
     
@@ -168,7 +212,7 @@ function updateUser($conn) {
             else if ($checkResultPhone->num_rows > 0) {
                 $data = array("status" => false, "data" => "Phone is already taken");
             } else {
-                $query = "UPDATE users sET username = '$username', email = '$email', password = MD5('$password'), phone = '$phone', role = '$role', status = '$status' WHERE user_id = '$user_id'";
+                $query = "UPDATE users sET username = '$username', email = '$email', password = '$password', phone = '$phone', role = '$role', status = '$status' WHERE user_id = '$user_id'";
         
                 $result = $conn->query($query);
         

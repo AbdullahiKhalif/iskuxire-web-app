@@ -19,7 +19,7 @@
     />
     <meta name="author" content="Bootlab" />
 
-    <title>Basketball Management System</title>
+    <title>Waste Management System</title>
 
     <link rel="canonical" href="dashboard-default-2.html" />
     <link rel="shortcut icon" href="../../assets/img/favicon.ico" />
@@ -93,7 +93,7 @@
               />
             </svg>
 
-            <span class="align-middle me-3">Basketball</span>
+            <span class="align-middle me-3 fw-bold">ISKU<span class="text-warning">XIRE</span></span>
           </a>
 
           <div id="userMenu">

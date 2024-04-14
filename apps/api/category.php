@@ -44,6 +44,27 @@ function readCategoryInfo($conn){
     echo json_encode($message);
     
 }
+// read catagory information
+function readCategoryAvailable($conn){
+    extract($_POST);
+    $query = "SELECT * FROM category WHERE status = 'available'";
+    $result = $conn->query($query);
+    $data = array();
+    $message = array();
+
+    if($result){
+        while($row = $result->fetch_assoc()){
+            $data [] = $row;
+        }
+
+        $message = array("status" => true, "data" => $data);
+    }else{
+        $message = array("status" => false, "data" => $conn->error);
+    }
+
+    echo json_encode($message);
+    
+}
 //register category
 
 function registerCategory($conn){
