@@ -63,15 +63,31 @@ function registerTransaction($conn){
     echo json_encode($data);
 }
 
-//update transaction
-
 function updateTransaction($conn){
+    // Extract POST data
     extract($_POST);
-    $userId =$_SESSION['user_id'];
-    $query = "UPDATE transactions SET ficility_id = '$ficility_id', waste_id  = '$waste_id', quantity ='$quantity', transaction_method = '$transaction_method'  WHERE transaction_id = '$transaction_id'";
+
+    // Check if session user_id exists
+    if(isset($_SESSION['user_id'])) {
+        $session_user_id = $_SESSION['user_id'];
+
+        // Check if session user_id matches POST userId
+        if($session_user_id != $user_id) {
+            $data = array("status"=>false, "data" => "Sorry!. You cannot update this translation data another user was submitted!");
+            echo json_encode($data);
+            return; // Stop further execution
+        }
+    } else {
+        $data = array("status"=>false, "data" => "Session user_id is not set");
+        echo json_encode($data);
+        return; // Stop further execution
+    }
+
+    // Continue with transaction update
+    $query = "UPDATE transactions SET user_id = '$user_id', ficility_id = '$ficility_id', waste_id = '$waste_id', quantity = '$quantity', transaction_method = '$transaction_method' WHERE transaction_id = '$transaction_id'";
     $result = $conn->query($query);
 
-    $data =array();
+    $data = array();
 
     if($result){
         $data = array("status"=>true, "data" => "Successfully updated Transaction ✔");
@@ -82,14 +98,53 @@ function updateTransaction($conn){
     echo json_encode($data);
 }
 
+
 // delete transaction
 
+// function deleteTransaction($conn){
+//     extract($_POST);
+//     $query = "DELETE FROM transactions WHERE transaction_id = '$transaction_id'";
+//     $result = $conn->query($query);
+
+//     $data =array();
+
+//     if($result){
+//         $data = array("status"=>true, "data" => "Successfully deleted transaction ✅");
+//     }else{
+//         $data = array("status"=>false, "data" => $conn->error);
+//     }
+
+//     echo json_encode($data);
+// }
+
 function deleteTransaction($conn){
+    // Start or resume the session
+    session_start();
+
+    // Extract POST data
     extract($_POST);
+
+    // Check if session user_id exists
+    if(isset($_SESSION['user_id'])) {
+        $session_user_id = $_SESSION['user_id'];
+
+        // Check if session user_id matches POST userId
+        if($session_user_id != $user_id) {
+            $data = array("status"=>false, "data" => "Sorry!. You cannot delete this translation data another user was submitted!");
+            echo json_encode($data);
+            return; // Stop further execution
+        }
+    } else {
+        $data = array("status"=>false, "data" => "Session user_id is not set");
+        echo json_encode($data);
+        return; // Stop further execution
+    }
+
+    // Continue with transaction deletion
     $query = "DELETE FROM transactions WHERE transaction_id = '$transaction_id'";
     $result = $conn->query($query);
 
-    $data =array();
+    $data = array();
 
     if($result){
         $data = array("status"=>true, "data" => "Successfully deleted transaction ✅");
@@ -99,6 +154,7 @@ function deleteTransaction($conn){
 
     echo json_encode($data);
 }
+
 
 if(isset($_POST['action'])){
     $action = $_POST['action'];
