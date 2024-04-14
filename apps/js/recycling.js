@@ -5,6 +5,7 @@ $("#addNew").click(function () {
     $(".modal-title").html("Add new recycling 😍");
   });
   loadData();
+  displayLocation();
   var btnAction = "Insert";
   var fileImage = document.querySelector("#image");
   var showImage = document.querySelector("#showImage");
@@ -35,15 +36,15 @@ $("#addNew").click(function () {
           response.forEach((res) => {
             tr += "<tr>";
             for (let r in res) {
-              if (r == "image") {
-                tr += `<td> <img src="../uploads/logoes/${res[r]}" style="width:40px;height:40px;border:1px solid #f44547; border-radius:50%; object-fit:cover;"></td>`;
+              if (r == "logo") {
+                tr += `<td> <img src="../uploads/logoes/${res[r]}" style="width:140px;height:40px;border:1px solid #f44547; border-radius:1px; padding:4px;"></td>`;
               } else {
                 tr += `<td>${res[r]}</td>`;
               }
             }
             tr += `<td>
-                      <a class="update_info" id=${res["ficility_id"]}><i class="fa fa-edit fs-4 bg-primary text-light p-2 rounded"></i></a>
-                      <a class="delete_info" id=${res["ficility_id"]}><i class="fa fa-trash bg-danger fs-4 p-2 text-light rounded"></i></a>
+                      <a class="update_info" id=${res["ficility_id"]}><i class="fa fa-edit fs-4 bg-primary text-light p-2 rounded m-1"></i></a>
+                      <a class="delete_info" id=${res["ficility_id"]}><i class="fa fa-trash bg-danger fs-4 p-2 text-light rounded m-1"></i></a>
                       </td>`;
             tr += "</tr>";
           });
@@ -54,6 +55,31 @@ $("#addNew").click(function () {
       },
     });
   }
+
+  //load location
+function displayLocation() {
+  var sendData = {
+      action: "readAllLocation",
+  };
+  $.ajax({
+      method: "POST",
+      dataType: "json",
+      url: "../api/location.php",
+      data: sendData,
+      success: (data) => {
+          var status = data.status;
+          var response = data.data;
+          var html = "";
+          if (status) {
+              html += `<option value="0">Select Option</option>`;
+              response.forEach((res) => {
+                  html += `<option value="${res["location_id"]}">${res["district"]}</option>`;
+              });
+              $("#location_id").append(html);
+          }
+      },
+  });
+}
   
   $("#recyclingForm").submit(function (e) {
     e.preventDefault();
@@ -75,15 +101,13 @@ $("#addNew").click(function () {
       displayMessage("error", "Email Is Empry! | Please enter an email");
     } else if (phone_no == 0) {
       displayMessage("error", "Phone Number Is Empry! | Please enter a Phone Number");
-    } else if (image == "") {
-      displayMessage("error", "Image Is Empry! | Please Select an Image");
     } else {
       var sendData = new FormData($("#recyclingForm")[0]);
       sendData.append("image", $("input[type=file]")[0].files[0]);
       if (btnAction == "Insert") {
         sendData.append("action", "registerRecycle");
       } else {
-        sendData.append("action", "updaterRecycle");
+        sendData.append("action", "updateRecycle");
       }
   
       $.ajax({
@@ -110,7 +134,7 @@ $("#addNew").click(function () {
   });
   function fetchrecyclingInfo(id) {
     var SendingData = {
-      action: "readRecyleInfo",
+      action: "readRecycleInfo",
       ficility_id: id,
     };
   

@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 include '../config/conn.php';
 header('Content-Type: application/json');
 
@@ -48,6 +48,7 @@ function readTransactionInfo($conn){
 
 function registerTransaction($conn){
     extract($_POST);
+    $user_id =$_SESSION['user_id'];
     $query = "INSERT INTO transactions (user_id,ficility_id, waste_id, quantity, transaction_method) VALUES('$user_id', '$ficility_id', '$waste_id', '$quantity', '$transaction_method')";
     $result = $conn->query($query);
 
@@ -66,7 +67,8 @@ function registerTransaction($conn){
 
 function updateTransaction($conn){
     extract($_POST);
-    $query = "UPDATE transactions SET user_id =  '$user_id' , ficility_id = '$ficility_id', waste_id  = '$waste_id', quantity ='$quantity', transaction_method = '$transaction_method'  WHERE transaction_id = '$transaction_id'";
+    $userId =$_SESSION['user_id'];
+    $query = "UPDATE transactions SET ficility_id = '$ficility_id', waste_id  = '$waste_id', quantity ='$quantity', transaction_method = '$transaction_method'  WHERE transaction_id = '$transaction_id'";
     $result = $conn->query($query);
 
     $data =array();

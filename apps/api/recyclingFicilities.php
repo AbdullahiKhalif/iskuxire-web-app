@@ -168,7 +168,7 @@ function updateRecycle($conn){
         }
     }else{
                 // Continue with the update logic
-        $checkPhone = "SELECT * FROM recycling_ficilities WHERE phone = '$phone_no' AND ficility_id != '$ficility_id'";
+        $checkPhone = "SELECT * FROM recycling_ficilities WHERE phone_no = '$phone_no' AND ficility_id != '$ficility_id'";
         $checkResultPhone = $conn->query($checkPhone);
 
         if ($checkResultPhone->num_rows > 0) {
@@ -176,7 +176,7 @@ function updateRecycle($conn){
         } else {
             $checkFicilityName = "SELECT * FROM recycling_ficilities WHERE ficility_name = '$ficility_name' AND ficility_id != '$ficility_id'";
             $checkEmail = "SELECT * FROM recycling_ficilities WHERE email = '$email' AND ficility_id != '$ficility_id'";
-            $checkPhone = "SELECT * FROM recycling_ficilities WHERE phone = '$phone' AND ficility_id != '$ficility_id'";
+            $checkPhone = "SELECT * FROM recycling_ficilities WHERE phone_no = '$phone_no' AND ficility_id != '$ficility_id'";
             $checkResultFicilityName = $conn->query($checkFicilityName);
             $checkResultEmail = $conn->query($checkEmail);
             $checkResultPhone = $conn->query($checkPhone);
