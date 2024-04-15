@@ -6,7 +6,7 @@ header('Content-Type: application/json');
 function getTotalUsers($conn){
     $data = array();
     $message = array();
-    $query = "SELECT COUNT(*) 'total' FROM category";
+    $query = "SELECT COUNT(*) 'total' FROM users";
     $result = $conn->query($query);
 
     if($result){

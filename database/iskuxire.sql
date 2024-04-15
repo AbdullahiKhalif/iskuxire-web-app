@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2024 at 09:54 PM
+-- Generation Time: Apr 15, 2024 at 07:20 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -25,6 +25,27 @@ DELIMITER $$
 --
 -- Procedures
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getUserAuthority` (IN `_userId` VARCHAR(11) CHARSET utf8)   BEGIN
+SELECT systemcategory.id category_id, systemcategory.categoryName, systemcategory.categoryRole,
+links.id, links.linkName 
+FROM user_authority left JOIN links 
+on user_authority.action = links.id LEFT JOIN systemcategory
+on links.categoryId = systemcategory.id
+WHERE user_authority.userId = _userId ORDER BY systemcategory.categoryRole, links.id;
+
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `getuserMenu` (IN `_userId` VARCHAR(11) CHARSET utf8)   BEGIN
+SELECT systemcategory.id category_id, systemcategory.categoryName, systemcategory.categoryIcon, systemcategory.categoryRole,
+links.id, links.linkName, links.link  
+FROM user_authority left JOIN links 
+on user_authority.action = links.id LEFT JOIN systemcategory
+on links.categoryId = systemcategory.id
+WHERE user_authority.userId = _userId GROUP BY links.id ORDER BY systemcategory.categoryRole, links.id;
+
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `loginUserSp` (IN `_username` VARCHAR(255) CHARSET utf8, IN `_password` VARCHAR(255) CHARSET utf8)   BEGIN
     IF EXISTS (SELECT * FROM users WHERE users.email = _username AND users.password = _password) THEN
         IF EXISTS (SELECT * FROM users WHERE users.email = _username AND users.status = 'Active') THEN
@@ -57,8 +78,46 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`id`, `category_name`, `status`, `date`) VALUES
-(1, 'plastic', 'Ready', '2024-04-12'),
-(2, 'Caag', 'Not Ready', '2024-04-14');
+(1, 'plastic', 'Available', '2024-04-12'),
+(2, 'Caag', 'Available', '2024-04-14'),
+(3, 'Jiingad', 'Not Available', '2024-04-14'),
+(4, 'Jiingad 2', 'Available', '2024-04-14'),
+(5, 'Jiingad 3', 'Not Available', '2024-04-14'),
+(6, '', '', '0000-00-00'),
+(7, '', '', '0000-00-00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `links`
+--
+
+CREATE TABLE `links` (
+  `id` int(11) NOT NULL,
+  `linkName` varchar(250) NOT NULL,
+  `link` varchar(250) NOT NULL,
+  `categoryId` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `links`
+--
+
+INSERT INTO `links` (`id`, `linkName`, `link`, `categoryId`, `date`) VALUES
+(1, 'Dashboard', 'dashboard.php', 1, '2024-04-14 11:48:52'),
+(2, 'Category', 'category.php', 3, '2024-04-14 11:49:45'),
+(3, 'Location', 'location.php', 2, '2024-04-14 11:50:02'),
+(4, 'Sign out', 'login.php', 3, '2024-04-14 11:50:44'),
+(5, 'Recycle Facilities', 'recyclingFicilities.php', 2, '2024-04-14 11:51:45'),
+(6, 'Report Post', 'reportPosts.php', 3, '2024-04-14 11:54:17'),
+(7, 'Shedule', 'schedule.php', 2, '2024-04-14 11:54:33'),
+(8, 'system Category', 'systemCategories.php', 3, '2024-04-14 11:54:49'),
+(9, 'System Links', 'systemLinks.php', 3, '2024-04-14 11:55:05'),
+(10, 'Transactions', 'transaction.php', 2, '2024-04-14 11:55:24'),
+(11, 'Users Accounts', 'users.php', 3, '2024-04-14 11:56:13'),
+(12, 'Waste', 'waste.php', 2, '2024-04-14 11:56:31'),
+(13, 'System Authorities', 'systemAuthorities.php', 3, '2024-04-14 12:56:14');
 
 -- --------------------------------------------------------
 
@@ -78,7 +137,8 @@ CREATE TABLE `location` (
 --
 
 INSERT INTO `location` (`location_id`, `district`, `village`, `zone`) VALUES
-(1, 'Yaaqshiid', 'Taleex', 'Al-Baraka Hospital');
+(1, 'Yaaqshiid', 'Taleex', 'Al-Baraka Hospital'),
+(2, 'Kaxda', 'Bandir', 'Jamhuriya');
 
 -- --------------------------------------------------------
 
@@ -103,7 +163,8 @@ CREATE TABLE `recycling_ficilities` (
 
 INSERT INTO `recycling_ficilities` (`ficility_id`, `ficility_name`, `logo`, `description`, `location_id`, `email`, `phone_no`, `date`) VALUES
 ('RF_001', 'Banadir', 'RF_001.png', 'waa shirkad recyling ku sameesa wax yaabha past-iga ah sida caagaha IWM', 1, 'banadir@gmail.com', 615555551, '2024-04-13 15:43:29'),
-('RF_002', 'Khalfa', 'RF_002.png', 'Waa organization goal-kooda yahay in dhamaan wixii recyling ubaahan inay xaliyaan', 1, 'khalifa@gmail.com', 618390115, '2024-04-13 15:53:19');
+('RF_002', 'Khalfa', 'RF_002.png', 'Waa organization goal-kooda yahay in dhamaan wixii recyling ubaahan inay xaliyaan', 2, 'khalifa@gmail.com', 618390115, '2024-04-14 03:43:06'),
+('RF_003', 'Jamhuriya', 'RF_003.png', 'Waaqeybta kamid ah jaamcada jamhuuriya, waxaan nahay company recylcing ku sameeya, wixii shaqin magaalda laga nadiifey si aan dib ugu celin wadaka', 1, 'just@edu.so', 612222222, '2024-04-14 03:56:44');
 
 -- --------------------------------------------------------
 
@@ -124,8 +185,11 @@ CREATE TABLE `reports` (
 --
 
 INSERT INTO `reports` (`report_id`, `user_id`, `report_date`, `description`, `image`) VALUES
-('Rep001', 'USR001', '2024-04-13 17:08:41', 'Halkaan waa Kaxda hodan waxaa wada dhexdeeda yaalo qashin aad u tiro badan . please haka qaadaan dadka ku shaqo leh', 'Rep001.png'),
-('Rep002', 'USR001', '2024-04-13 17:10:43', 'Halkaan waa Hodan hodan waxaa wada dhexdeeda yaalo qashin aad u tiro badan . please haka qaadaan dadka ku shaqo leh', 'Rep002.png');
+('Rep001', 'USR001', '2024-04-14 09:28:22', 'Halkaan waa Hodan hodan waxaa wada dhexdeeda yaalo qashin aad u tiro badan . please haka qaadaan dadka ku shaqo leh', 'Rep001.png'),
+('Rep002', 'USR001', '2024-04-13 17:10:43', 'Halkaan waa Hodan hodan waxaa wada dhexdeeda yaalo qashin aad u tiro badan . please haka qaadaan dadka ku shaqo leh', 'Rep002.png'),
+('Rep003', 'USR002', '2024-04-14 07:36:42', 'Halkaan waa isguuska saybiyaano waxaa aad ubooban qashin. please cidda ku shaqo leh haqaadaan', 'Rep003.png'),
+('Rep004', 'USR002', '2024-04-14 07:39:33', 'Halkaan waa isguuska Fagax waxaa aad ubooban qashin shalay ilaa iyo maanta cid qaaday ma jirto. please cidda ku shaqo leh haqaadaan', 'Rep004.png'),
+('Rep005', 'USR002', '2024-04-14 10:25:50', 'Shalay iyo maanta magaalada waxaa aad ugu batay qashin-ka lasoo dhigaayo waddada dhexdee. waxaan bulshada ka waciyi gelineynaa inay arintaas masuuuliyada gaar aha iska saaraan.', 'Rep005.png');
 
 -- --------------------------------------------------------
 
@@ -147,7 +211,45 @@ CREATE TABLE `schedule` (
 
 INSERT INTO `schedule` (`schedule_id`, `ficility_id`, `days_of_week`, `start_date`, `end_date`) VALUES
 (1, 'RF_001', 'Sabti, Axad, Isniin', '2024-04-13', '2025-04-13'),
-(2, 'RF_002', 'Sabti, Isniin, Arbaco', '2024-04-15', '2025-04-15');
+(2, 'RF_002', 'Sabti, Isniin, Arbaco', '2024-04-15', '2025-04-15'),
+(3, 'RF_003', 'Talaado, Arbaco', '2024-04-14', '2025-12-14');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `systemauthview`
+-- (See below for the actual view)
+--
+CREATE TABLE `systemauthview` (
+`category_id` int(11)
+,`categoryName` varchar(250)
+,`categoryRole` varchar(250)
+,`id` int(11)
+,`linkName` varchar(250)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `systemcategory`
+--
+
+CREATE TABLE `systemcategory` (
+  `id` int(11) NOT NULL,
+  `categoryName` varchar(250) NOT NULL,
+  `categoryIcon` varchar(250) NOT NULL,
+  `categoryRole` varchar(250) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `systemcategory`
+--
+
+INSERT INTO `systemcategory` (`id`, `categoryName`, `categoryIcon`, `categoryRole`, `date`) VALUES
+(1, 'Dashboard', 'fa fa-home', 'Dashboard', '2024-04-14 11:41:46'),
+(2, 'Subscriber', 'fa-solid fa-box', 'Subscriber', '2024-04-14 11:42:41'),
+(3, 'Super Admin', 'fa solid-icon-lock', 'Super Admin', '2024-04-14 11:42:24');
 
 -- --------------------------------------------------------
 
@@ -160,7 +262,7 @@ CREATE TABLE `transactions` (
   `user_id` varchar(15) DEFAULT NULL,
   `ficility_id` varchar(15) DEFAULT NULL,
   `waste_id` int(11) DEFAULT NULL,
-  `transaction_date` timestamp NULL DEFAULT NULL,
+  `transaction_date` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `quantity` int(11) DEFAULT NULL,
   `transaction_method` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -170,8 +272,10 @@ CREATE TABLE `transactions` (
 --
 
 INSERT INTO `transactions` (`transaction_id`, `user_id`, `ficility_id`, `waste_id`, `transaction_date`, `quantity`, `transaction_method`) VALUES
-(1, 'USR001', 'RF_001', 1, NULL, 5, 'Evcplus'),
-(3, 'USR002', 'RF_002', 1, NULL, 3, 'E-Dahab');
+(1, 'USR001', 'RF_001', 1, '2024-04-14 05:23:53', 5, 'Evcplus'),
+(2, 'USR001', 'RF_002', 4, '2024-04-14 04:50:15', 4, 'e-Dahab'),
+(4, 'USR001', 'RF_003', 4, '2024-04-14 04:54:06', 2, 'Evcplus'),
+(5, 'USR002', 'RF_003', 4, '2024-04-14 05:42:41', 3, 'e-Dahab');
 
 -- --------------------------------------------------------
 
@@ -195,8 +299,65 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `phone`, `role`, `image`, `status`) VALUES
-('USR001', 'khalifa', 'khalif115@gmail.com', 'admin', 618390120, 'Admin', 'USR001.png', 'Active'),
-('USR002', 'Eng-Khalif', 'khalifa115@gmail.com', '21232f297a57a5a743894a0e4a801fc3', 618390115, 'User', 'USR002.png', 'Active');
+('USR001', 'Faiso', 'ugaasa@gmail.com', 'admin', 618390120, 'Admin', 'USR001.png', 'Active'),
+('USR002', 'Eng-Khalif', 'khalifa115@gmail.com', 'user', 618390115, 'User', 'USR002.png', 'Active'),
+('USR003', 'moha-nor', 'moha@gmail.com', 'admin', 2147483647, 'Admin', 'USR003.png', 'Active');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_authority`
+--
+
+CREATE TABLE `user_authority` (
+  `id` int(11) NOT NULL,
+  `userId` varchar(15) NOT NULL,
+  `action` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_authority`
+--
+
+INSERT INTO `user_authority` (`id`, `userId`, `action`) VALUES
+(44, 'USR001', 1),
+(45, 'USR001', 3),
+(46, 'USR001', 5),
+(47, 'USR001', 7),
+(48, 'USR001', 10),
+(49, 'USR001', 12),
+(50, 'USR001', 2),
+(51, 'USR001', 4),
+(52, 'USR001', 6),
+(53, 'USR001', 8),
+(54, 'USR001', 9),
+(55, 'USR001', 11),
+(56, 'USR001', 13),
+(58, 'USR003', 1),
+(59, 'USR003', 3),
+(60, 'USR003', 5),
+(61, 'USR003', 7),
+(62, 'USR003', 10),
+(63, 'USR003', 12),
+(64, 'USR003', 2),
+(65, 'USR003', 4),
+(66, 'USR003', 8),
+(67, 'USR003', 9),
+(68, 'USR003', 11),
+(69, 'USR003', 13),
+(70, 'USR002', 1),
+(71, 'USR002', 3),
+(72, 'USR002', 5),
+(73, 'USR002', 7),
+(74, 'USR002', 10),
+(75, 'USR002', 12),
+(76, 'USR002', 2),
+(77, 'USR002', 4),
+(78, 'USR002', 6),
+(79, 'USR002', 8),
+(80, 'USR002', 9),
+(81, 'USR002', 11),
+(82, 'USR002', 13);
 
 -- --------------------------------------------------------
 
@@ -219,7 +380,17 @@ CREATE TABLE `waste` (
 --
 
 INSERT INTO `waste` (`waste_id`, `description`, `category_id`, `address`, `weight`, `user_id`, `date`) VALUES
-(1, 'Waa qashin yaaley wadda dhexdeeda, kaaso oo dadka ay kamari waayeen dariiqa', 1, 'Hodon', 10, 'USR001', '2024-04-13 14:22:15');
+(1, 'Waa qashin yaaley wadda dhexdeeda, kaaso oo dadka ay kamari waayeen dariiqa', 1, 'Hodon', 10, 'USR001', '2024-04-13 14:22:15'),
+(4, ' waa wasaq aan kasoo qaadney afaafka hore ee madaxtooya', 4, 'Mugadishu-Somalia', 67, 'USR001', '2024-04-13 22:13:32');
+
+-- --------------------------------------------------------
+
+--
+-- Structure for view `systemauthview`
+--
+DROP TABLE IF EXISTS `systemauthview`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `systemauthview`  AS SELECT `systemcategory`.`id` AS `category_id`, `systemcategory`.`categoryName` AS `categoryName`, `systemcategory`.`categoryRole` AS `categoryRole`, `links`.`id` AS `id`, `links`.`linkName` AS `linkName` FROM (`systemcategory` left join `links` on(`systemcategory`.`id` = `links`.`categoryId`)) ORDER BY `systemcategory`.`categoryRole` ASC, `links`.`id` ASC ;
 
 --
 -- Indexes for dumped tables
@@ -230,6 +401,13 @@ INSERT INTO `waste` (`waste_id`, `description`, `category_id`, `address`, `weigh
 --
 ALTER TABLE `category`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `links`
+--
+ALTER TABLE `links`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `system_links_category_id` (`categoryId`);
 
 --
 -- Indexes for table `location`
@@ -259,6 +437,12 @@ ALTER TABLE `schedule`
   ADD KEY `ficility_id` (`ficility_id`);
 
 --
+-- Indexes for table `systemcategory`
+--
+ALTER TABLE `systemcategory`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `transactions`
 --
 ALTER TABLE `transactions`
@@ -272,6 +456,13 @@ ALTER TABLE `transactions`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`);
+
+--
+-- Indexes for table `user_authority`
+--
+ALTER TABLE `user_authority`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `system_action_link` (`action`);
 
 --
 -- Indexes for table `waste`
@@ -289,35 +480,59 @@ ALTER TABLE `waste`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `links`
+--
+ALTER TABLE `links`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `systemcategory`
+--
+ALTER TABLE `systemcategory`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `user_authority`
+--
+ALTER TABLE `user_authority`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `waste`
 --
 ALTER TABLE `waste`
-  MODIFY `waste_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `waste_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `links`
+--
+ALTER TABLE `links`
+  ADD CONSTRAINT `system_links_category_id` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`);
 
 --
 -- Constraints for table `recycling_ficilities`
@@ -344,6 +559,12 @@ ALTER TABLE `transactions`
   ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   ADD CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`ficility_id`) REFERENCES `recycling_ficilities` (`ficility_id`),
   ADD CONSTRAINT `transactions_ibfk_3` FOREIGN KEY (`waste_id`) REFERENCES `waste` (`waste_id`);
+
+--
+-- Constraints for table `user_authority`
+--
+ALTER TABLE `user_authority`
+  ADD CONSTRAINT `system_action_link` FOREIGN KEY (`action`) REFERENCES `links` (`id`);
 
 --
 -- Constraints for table `waste`
