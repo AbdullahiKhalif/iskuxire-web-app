@@ -189,7 +189,7 @@ function loadData() {
                     <div class="mb-3">
                       ${item['description']}
                     </div>
-                    <img src="../uploads/report posts/${item['image']}" alt="img" class="img-fluid" style="object-fit: cover;">
+                    <img src="../uploads/report posts/${item['image']}" alt="img" class="w-100 img-fluid" style="object-fit: cover;">
                     <div class="d-flex justify-content-end mt-3">
                       <a class="btn btn-primary update_info me-2" update_id="${item['report_id']}"><i class="fa fa-edit"></i> Update</a>
                       <a class="btn btn-danger delete_info" delete_id="${item['report_id']}"><i class="fa fa-trash"></i> Delete</a>
