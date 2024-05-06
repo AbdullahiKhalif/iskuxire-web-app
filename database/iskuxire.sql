@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 15, 2024 at 07:20 PM
+-- Generation Time: Apr 17, 2024 at 10:31 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -80,11 +80,9 @@ CREATE TABLE `category` (
 INSERT INTO `category` (`id`, `category_name`, `status`, `date`) VALUES
 (1, 'plastic', 'Available', '2024-04-12'),
 (2, 'Caag', 'Available', '2024-04-14'),
-(3, 'Jiingad', 'Not Available', '2024-04-14'),
+(3, 'Jiingad', 'Available', '2024-04-14'),
 (4, 'Jiingad 2', 'Available', '2024-04-14'),
-(5, 'Jiingad 3', 'Not Available', '2024-04-14'),
-(6, '', '', '0000-00-00'),
-(7, '', '', '0000-00-00');
+(5, 'Jiingad 3', 'Not Available', '2024-04-14');
 
 -- --------------------------------------------------------
 
@@ -138,7 +136,8 @@ CREATE TABLE `location` (
 
 INSERT INTO `location` (`location_id`, `district`, `village`, `zone`) VALUES
 (1, 'Yaaqshiid', 'Taleex', 'Al-Baraka Hospital'),
-(2, 'Kaxda', 'Bandir', 'Jamhuriya');
+(2, 'Hoden', 'Bandir', 'Jamhuriya University'),
+(3, 'Howlwadaag', 'Bakaaro', 'Daawada');
 
 -- --------------------------------------------------------
 
@@ -164,7 +163,7 @@ CREATE TABLE `recycling_ficilities` (
 INSERT INTO `recycling_ficilities` (`ficility_id`, `ficility_name`, `logo`, `description`, `location_id`, `email`, `phone_no`, `date`) VALUES
 ('RF_001', 'Banadir', 'RF_001.png', 'waa shirkad recyling ku sameesa wax yaabha past-iga ah sida caagaha IWM', 1, 'banadir@gmail.com', 615555551, '2024-04-13 15:43:29'),
 ('RF_002', 'Khalfa', 'RF_002.png', 'Waa organization goal-kooda yahay in dhamaan wixii recyling ubaahan inay xaliyaan', 2, 'khalifa@gmail.com', 618390115, '2024-04-14 03:43:06'),
-('RF_003', 'Jamhuriya', 'RF_003.png', 'Waaqeybta kamid ah jaamcada jamhuuriya, waxaan nahay company recylcing ku sameeya, wixii shaqin magaalda laga nadiifey si aan dib ugu celin wadaka', 1, 'just@edu.so', 612222222, '2024-04-14 03:56:44');
+('RF_003', 'Hormuud', 'RF_003.png', 'waa company ku caan ah inuu recycle ku sameeyo wax yaabah wadada laso dhigay', 3, 'hormuud@gmail.com', 61555555, '2024-04-15 17:55:20');
 
 -- --------------------------------------------------------
 
@@ -189,7 +188,9 @@ INSERT INTO `reports` (`report_id`, `user_id`, `report_date`, `description`, `im
 ('Rep002', 'USR001', '2024-04-13 17:10:43', 'Halkaan waa Hodan hodan waxaa wada dhexdeeda yaalo qashin aad u tiro badan . please haka qaadaan dadka ku shaqo leh', 'Rep002.png'),
 ('Rep003', 'USR002', '2024-04-14 07:36:42', 'Halkaan waa isguuska saybiyaano waxaa aad ubooban qashin. please cidda ku shaqo leh haqaadaan', 'Rep003.png'),
 ('Rep004', 'USR002', '2024-04-14 07:39:33', 'Halkaan waa isguuska Fagax waxaa aad ubooban qashin shalay ilaa iyo maanta cid qaaday ma jirto. please cidda ku shaqo leh haqaadaan', 'Rep004.png'),
-('Rep005', 'USR002', '2024-04-14 10:25:50', 'Shalay iyo maanta magaalada waxaa aad ugu batay qashin-ka lasoo dhigaayo waddada dhexdee. waxaan bulshada ka waciyi gelineynaa inay arintaas masuuuliyada gaar aha iska saaraan.', 'Rep005.png');
+('Rep005', 'USR002', '2024-04-14 10:25:50', 'Shalay iyo maanta magaalada waxaa aad ugu batay qashin-ka lasoo dhigaayo waddada dhexdee. waxaan bulshada ka waciyi gelineynaa inay arintaas masuuuliyada gaar aha iska saaraan.', 'Rep005.png'),
+('Rep006', 'USR003', '2024-04-16 07:30:02', 'Waxaan bogaadineynaa ololaha nadaafadeed ee ka bilaabmay golbolada dalka, waxaan lee nahay halkaas kasii wada, waxaan sido kale umahdelineynaa dhalinyarada is xilqaantay oo dadaal adag ku bixisay. \r\nMahadsanidin.', 'Rep006.png'),
+('Rep007', 'USR004', '2024-04-17 20:28:08', 'Halkaan waa meel ay ka buuxaan caagad lasoo isticmaalay, waxaan farayaa qolada ku shaqo leh, inay halkaan ka qaadaan oo ay ku wareejiyaan shirkada Plastic Recycling-ka sameeya.', 'Rep007.png');
 
 -- --------------------------------------------------------
 
@@ -247,9 +248,9 @@ CREATE TABLE `systemcategory` (
 --
 
 INSERT INTO `systemcategory` (`id`, `categoryName`, `categoryIcon`, `categoryRole`, `date`) VALUES
-(1, 'Dashboard', 'fa fa-home', 'Dashboard', '2024-04-14 11:41:46'),
+(1, 'Dashboard', 'fa fa-home', 'Dashboard', '2024-04-15 17:58:08'),
 (2, 'Subscriber', 'fa-solid fa-box', 'Subscriber', '2024-04-14 11:42:41'),
-(3, 'Super Admin', 'fa solid-icon-lock', 'Super Admin', '2024-04-14 11:42:24');
+(3, 'Super Admin', 'fa fa-lock', 'Super Admin', '2024-04-15 17:58:23');
 
 -- --------------------------------------------------------
 
@@ -275,7 +276,7 @@ INSERT INTO `transactions` (`transaction_id`, `user_id`, `ficility_id`, `waste_i
 (1, 'USR001', 'RF_001', 1, '2024-04-14 05:23:53', 5, 'Evcplus'),
 (2, 'USR001', 'RF_002', 4, '2024-04-14 04:50:15', 4, 'e-Dahab'),
 (4, 'USR001', 'RF_003', 4, '2024-04-14 04:54:06', 2, 'Evcplus'),
-(5, 'USR002', 'RF_003', 4, '2024-04-14 05:42:41', 3, 'e-Dahab');
+(5, 'USR002', 'RF_003', 4, '2024-04-15 17:50:41', 4, 'e-Dahab');
 
 -- --------------------------------------------------------
 
@@ -299,9 +300,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `phone`, `role`, `image`, `status`) VALUES
-('USR001', 'Faiso', 'ugaasa@gmail.com', 'admin', 618390120, 'Admin', 'USR001.png', 'Active'),
-('USR002', 'Eng-Khalif', 'khalifa115@gmail.com', 'user', 618390115, 'User', 'USR002.png', 'Active'),
-('USR003', 'moha-nor', 'moha@gmail.com', 'admin', 2147483647, 'Admin', 'USR003.png', 'Active');
+('USR001', 'Faiso', 'ugaasa@gmail.com', 'admin', 618390120, 'User', 'USR001.png', 'Active'),
+('USR002', 'Eng-Khalif', 'khalifa115@gmail.com', 'admin', 618390115, 'Admin', 'USR002.png', 'Active'),
+('USR003', 'moha-nor', 'moha@gmail.com', 'admin', 2147483647, 'Admin', 'USR003.png', 'Active'),
+('USR004', 'Eng-Osman', 'osman@gov.so', 'osman123', 615045014, 'Admin', 'USR004.png', 'Active');
 
 -- --------------------------------------------------------
 
@@ -320,44 +322,47 @@ CREATE TABLE `user_authority` (
 --
 
 INSERT INTO `user_authority` (`id`, `userId`, `action`) VALUES
-(44, 'USR001', 1),
-(45, 'USR001', 3),
-(46, 'USR001', 5),
-(47, 'USR001', 7),
-(48, 'USR001', 10),
-(49, 'USR001', 12),
-(50, 'USR001', 2),
-(51, 'USR001', 4),
-(52, 'USR001', 6),
-(53, 'USR001', 8),
-(54, 'USR001', 9),
-(55, 'USR001', 11),
-(56, 'USR001', 13),
-(58, 'USR003', 1),
-(59, 'USR003', 3),
-(60, 'USR003', 5),
-(61, 'USR003', 7),
-(62, 'USR003', 10),
-(63, 'USR003', 12),
-(64, 'USR003', 2),
-(65, 'USR003', 4),
-(66, 'USR003', 8),
-(67, 'USR003', 9),
-(68, 'USR003', 11),
-(69, 'USR003', 13),
-(70, 'USR002', 1),
-(71, 'USR002', 3),
-(72, 'USR002', 5),
-(73, 'USR002', 7),
-(74, 'USR002', 10),
-(75, 'USR002', 12),
-(76, 'USR002', 2),
-(77, 'USR002', 4),
-(78, 'USR002', 6),
-(79, 'USR002', 8),
-(80, 'USR002', 9),
-(81, 'USR002', 11),
-(82, 'USR002', 13);
+(84, 'USR001', 1),
+(85, 'USR001', 6),
+(94, 'USR002', 1),
+(95, 'USR002', 3),
+(96, 'USR002', 5),
+(97, 'USR002', 7),
+(98, 'USR002', 10),
+(99, 'USR002', 12),
+(100, 'USR002', 2),
+(101, 'USR002', 4),
+(102, 'USR002', 6),
+(103, 'USR002', 8),
+(104, 'USR002', 9),
+(105, 'USR002', 11),
+(106, 'USR002', 13),
+(107, 'USR003', 1),
+(108, 'USR003', 3),
+(109, 'USR003', 5),
+(110, 'USR003', 7),
+(111, 'USR003', 10),
+(112, 'USR003', 12),
+(113, 'USR003', 2),
+(114, 'USR003', 4),
+(115, 'USR003', 6),
+(116, 'USR003', 8),
+(117, 'USR003', 9),
+(118, 'USR003', 11),
+(119, 'USR003', 13),
+(120, 'USR004', 1),
+(121, 'USR004', 3),
+(122, 'USR004', 5),
+(123, 'USR004', 7),
+(124, 'USR004', 10),
+(125, 'USR004', 12),
+(126, 'USR004', 2),
+(127, 'USR004', 4),
+(128, 'USR004', 6),
+(129, 'USR004', 8),
+(130, 'USR004', 9),
+(131, 'USR004', 11),
+(132, 'USR004', 13);
 
 -- --------------------------------------------------------
 
@@ -492,7 +497,7 @@ ALTER TABLE `links`
 -- AUTO_INCREMENT for table `location`
 --
 ALTER TABLE `location`
-  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `schedule`
@@ -516,7 +521,7 @@ ALTER TABLE `transactions`
 -- AUTO_INCREMENT for table `user_authority`
 --
 ALTER TABLE `user_authority`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 
 --
 -- AUTO_INCREMENT for table `waste`
@@ -532,7 +537,7 @@ ALTER TABLE `waste`
 -- Constraints for table `links`
 --
 ALTER TABLE `links`
-  ADD CONSTRAINT `system_links_category_id` FOREIGN KEY (`categoryId`) REFERENCES `category` (`id`);
+  ADD CONSTRAINT `system_links_category_id` FOREIGN KEY (`categoryId`) REFERENCES `systemcategory` (`id`);
 
 --
 -- Constraints for table `recycling_ficilities`

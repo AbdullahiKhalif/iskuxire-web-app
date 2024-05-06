@@ -23,7 +23,7 @@ function loadData() {
                   <div class="card mb-3">
                     <div class="card-body">
                       <div class="d-flex align-items-center mb-3">
-                        <img src="../uploads/users/${item['user_id']}.png" alt="img" class="img-fluid rounded-circle" style="width:40px;height:40px;">
+                        <img src="../uploads/users/${item['user_id']}.png" alt="img" class="img-fluid rounded-circle" style="width:40px;height:40px; border: 1px solid #ddd;">
                         <h3 class="fs-6 fw-bold ms-3">${item['username']}</h3>
                         <span class="ms-auto fs-6">${item['report_date']}</span>
                       </div>
